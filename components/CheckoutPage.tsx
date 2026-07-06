@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CartItem } from '../types';
-import { ArrowLeft, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Banknote, CheckCircle, QrCode } from 'lucide-react';
 
 interface CheckoutPageProps {
   cart: CartItem[];
@@ -16,6 +16,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({ cart, onBack, onPlaceOrder 
   const [paymentMethod, setPaymentMethod] = useState('upi');
 
   const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const qrCodeImage = '/images/payment-qr.svg';
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,7 +71,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({ cart, onBack, onPlaceOrder 
                             onClick={() => setPaymentMethod('upi')}
                             className={`p-6 rounded-xl border-2 flex items-center gap-4 transition-all relative overflow-hidden group ${paymentMethod === 'upi' ? 'bg-secondary border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] scale-[1.02]' : 'bg-white border-gray-300 hover:border-black hover:bg-gray-50'}`}
                         >
-                            <div className="text-4xl group-hover:scale-110 transition-transform">📱</div>
+                            <QrCode size={42} className="shrink-0 group-hover:scale-110 transition-transform" />
                             <div className="flex flex-col items-start">
                                 <span className="font-doodle text-2xl font-bold">UPI / QR Code</span>
                                 <span className="text-xs font-sans text-gray-600">GPay, Paytm, PhonePe</span>
@@ -78,12 +79,28 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({ cart, onBack, onPlaceOrder 
                             {paymentMethod === 'upi' && <div className="absolute top-2 right-2 text-black"><CheckCircle size={20} fill="white" /></div>}
                         </button>
 
+                        {paymentMethod === 'upi' && (
+                            <div className="rounded-xl border-2 border-dashed border-black bg-yellow-50 p-4 flex flex-col sm:flex-row items-center gap-4">
+                                <div className="bg-white p-3 rounded-lg border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+                                    <img
+                                        src={qrCodeImage}
+                                        alt="Campus Bites UPI QR code"
+                                        className="w-36 h-36 object-contain"
+                                    />
+                                </div>
+                                <div className="text-center sm:text-left">
+                                    <p className="font-doodle text-2xl font-bold text-ink">Scan and pay ₹{total}</p>
+                                    <p className="text-sm text-gray-600 mt-1">After payment, tap Confirm Order so the kitchen receives your token.</p>
+                                </div>
+                            </div>
+                        )}
+
                         <button
                             type="button"
                             onClick={() => setPaymentMethod('cash')}
                             className={`p-6 rounded-xl border-2 flex items-center gap-4 transition-all relative overflow-hidden group ${paymentMethod === 'cash' ? 'bg-secondary border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] scale-[1.02]' : 'bg-white border-gray-300 hover:border-black hover:bg-gray-50'}`}
                         >
-                            <div className="text-4xl group-hover:scale-110 transition-transform">💵</div>
+                            <Banknote size={42} className="shrink-0 group-hover:scale-110 transition-transform" />
                             <div className="flex flex-col items-start">
                                 <span className="font-doodle text-2xl font-bold">Cash on Counter</span>
                                 <span className="text-xs font-sans text-gray-600">Pay when you collect</span>
