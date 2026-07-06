@@ -49,6 +49,6 @@ export const getChatResponse = async (message: string, history: {role: 'user' | 
     return response.text || "Oops! I dropped the tray. Can you say that again?";
   } catch (error) {
     console.error("Gemini API Error:", error);
-    return "My brain froze like a slushie! 🥶 Try again later.";
+    return "Sorry, I couldn't get that right now. Please try again in a moment.";
   }
 };
